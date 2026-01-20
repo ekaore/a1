@@ -67,7 +67,7 @@ export default function ContactSection() {
               </div>
               <div className="contact-info-text">
                 <h3 className="contact-info-title">Адрес</h3>
-                <p className="contact-info-value">г. Ростов-на-Дону</p>
+                <p className="contact-info-value">г. Таганрог</p>
               </div>
             </div>
           </div>
