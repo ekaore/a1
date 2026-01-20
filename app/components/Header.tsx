@@ -23,6 +23,7 @@ export default function Header() {
         <a href="#home" className="nav-link">Главная</a>
         <a href="#tariffs" className="nav-link">Тарифы</a>
         <a href="#advantages" className="nav-link">Преимущества</a>
+        <Link href="/tariffs" className="nav-link">Телефония</Link>
       </nav>
 
       <div className="header-right">
