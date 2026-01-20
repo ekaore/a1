@@ -6,7 +6,7 @@ export default function Footer() {
           <div className="footer-main">
             <h3 className="footer-title">ИП Григорян Борис Леонович</h3>
             <p className="footer-copyright">
-              © 2023 ИП Григорян Борис Леонович. Все права защищены.
+              © 2026 ИП Григорян Борис Леонович. Все права защищены.
             </p>
           </div>
           

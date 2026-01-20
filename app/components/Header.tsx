@@ -36,13 +36,18 @@ export default function Header() {
             <span className="phone-number">+7 8634 45 33 33</span>
           </div>
         </div>
-        <button className="header-button">
+        <a 
+          href="https://acct.rgbl61.ru/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="header-button"
+        >
           <svg className="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
           Личный кабинет
-        </button>
+        </a>
       </div>
     </header>
   )

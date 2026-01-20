@@ -50,10 +50,6 @@ export default function HeroSection() {
               <div className="stat-label">Подключение</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">3+</div>
-              <div className="stat-label">Лет на рынке</div>
-            </div>
-            <div className="stat-item">
               <div className="stat-number">99.9%</div>
               <div className="stat-label">Доступность сети</div>
             </div>

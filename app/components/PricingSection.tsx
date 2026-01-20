@@ -4,13 +4,13 @@ export default function PricingSection() {
   const tariffs = [
     {
       speed: '100 Мбит/с',
-      price: '3300₽',
+      price: '4200₽',
       popular: false,
       description: 'Идеально подходит для малого бизнеса и офисов с базовыми потребностями в интернете.'
     },
     {
       speed: '1 Гбит/с',
-      price: '5500₽',
+      price: '6300₽',
       popular: true,
       description: 'Максимальная скорость для крупных компаний и работы с большими объемами данных.'
     },
