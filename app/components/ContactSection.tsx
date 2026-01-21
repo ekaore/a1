@@ -54,7 +54,7 @@ export default function ContactSection() {
               </div>
               <div className="contact-info-text">
                 <h3 className="contact-info-title">Email</h3>
-                <p className="contact-info-value">info@example.com</p>
+                <p className="contact-info-value">info@a1-telecom.ru</p>
               </div>
             </div>
 
@@ -67,7 +67,7 @@ export default function ContactSection() {
               </div>
               <div className="contact-info-text">
                 <h3 className="contact-info-title">Адрес</h3>
-                <p className="contact-info-value">г. Таганрог</p>
+                <p className="contact-info-value">г. Таганрог, пер. Лермонтовский, 8</p>
               </div>
             </div>
           </div>

@@ -1,4 +1,14 @@
+'use client'
+
 export default function HeroSection() {
+  const handleConsultationClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   return (
     <section id="home" className="hero-section">
       <div className="hero-background">
@@ -35,7 +45,7 @@ export default function HeroSection() {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
-            <a href="#contacts" className="hero-button secondary">
+            <a href="#contact" className="hero-button secondary" onClick={handleConsultationClick}>
               Получить консультацию
             </a>
           </div>
