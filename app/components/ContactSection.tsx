@@ -9,6 +9,7 @@ export default function ContactSection() {
     email: '',
     message: ''
   })
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +28,7 @@ export default function ContactSection() {
     <section
       id="contact"
       className="contact-section"
-      style={{ minHeight: '100vh', scrollMarginTop: '80px' }}
+      style={{ minHeight: '75vh', scrollMarginTop: '80px' }}
     >
       <div className="contact-container">
         <div className="contact-header">
@@ -133,7 +134,36 @@ export default function ContactSection() {
               />
             </div>
 
-            <button type="submit" className="contact-submit-button">
+            <div className="form-group">
+              <label className="form-checkbox-label">
+                <input
+                  type="checkbox"
+                  id="privacy-checkbox"
+                  checked={agreedToPrivacy}
+                  onChange={(e) => setAgreedToPrivacy(e.target.checked)}
+                  className="form-checkbox"
+                />
+                <span className="form-checkbox-text">
+                  Я согласен(а) с{' '}
+                  <a 
+                    href="#" 
+                    className="form-checkbox-link" 
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setAgreedToPrivacy(!agreedToPrivacy)
+                    }}
+                  >
+                    политикой обработки персональных данных
+                  </a>
+                </span>
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              className="contact-submit-button"
+              disabled={!agreedToPrivacy}
+            >
               Отправить сообщение
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22 2L11 13"/>
