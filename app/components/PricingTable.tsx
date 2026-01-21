@@ -12,9 +12,8 @@ interface PriceItem {
 
 export default function PricingTable() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCountry, setSelectedCountry] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [selectedRegion, setSelectedRegion] = useState<string>('all')
 
   // Импортируем данные из pricing/page.tsx - используем только часть для примера
   // В реальности лучше вынести данные в отдельный файл
@@ -86,21 +85,30 @@ export default function PricingTable() {
     { number: '81061', direction: 'Австралия, стационарные', price: 4.272, country: 'Австралия', type: 'стационарные' },
   ]
 
-  const countries = useMemo(() => {
-    const unique = Array.from(new Set(prices.map(p => p.country))).sort()
-    return unique
-  }, [])
+
+  const getRegionByCountry = (country: string): string => {
+    const russiaCountries = ['Россия', 'Беларусь', 'Украина', 'Армения', 'Азербайджан', 'Узбекистан', 'Туркменистан', 'Таджикистан']
+    const europeCountries = ['Эстония', 'Швеция', 'Швейцария', 'Чехия', 'Хорватия', 'Франция', 'Финляндия', 'Румыния', 'Португалия', 'Польша', 'Германия', 'Испания', 'Италия', 'Великобритания', 'Словения', 'Словакия', 'Сербия и Черногория', 'Австрия']
+    const asiaCountries = ['Япония', 'Южная Корея', 'Турция', 'Тайвань']
+    const americaCountries = ['США и Канада']
+
+    if (russiaCountries.includes(country)) return 'Россия'
+    if (europeCountries.includes(country)) return 'Европа'
+    if (asiaCountries.includes(country)) return 'Азия'
+    if (americaCountries.includes(country)) return 'Америка'
+    return 'Другие'
+  }
 
   const filteredPrices = useMemo(() => {
     return prices.filter(price => {
       const matchesSearch = price.direction.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            price.number.includes(searchQuery) ||
                            price.country.toLowerCase().includes(searchQuery.toLowerCase())
-      const matchesCountry = selectedCountry === 'all' || price.country === selectedCountry
       const matchesType = selectedType === 'all' || price.type === selectedType
-      return matchesSearch && matchesCountry && matchesType
+      const matchesRegion = selectedRegion === 'all' || getRegionByCountry(price.country) === selectedRegion
+      return matchesSearch && matchesType && matchesRegion
     })
-  }, [searchQuery, selectedCountry, selectedType])
+  }, [searchQuery, selectedType, selectedRegion])
 
   const groupedByCountry = useMemo(() => {
     const grouped: { [key: string]: PriceItem[] } = {}
@@ -120,133 +128,116 @@ export default function PricingTable() {
         <p className="pricing-table-subtitle">В рамках договора ИП "Григорян"</p>
       </div>
 
-      <div className={`pricing-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-        <div className={`pricing-filters-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
-          {!sidebarCollapsed && (
-            <button 
-              className="sidebar-toggle"
-              onClick={() => setSidebarCollapsed(true)}
-              aria-label="Свернуть фильтры"
-            >
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-              >
-                <path d="M15 18l-6-6 6-6"/>
-              </svg>
-            </button>
-          )}
-          
-          {sidebarCollapsed && (
-            <button 
-              className="sidebar-open-button"
-              onClick={() => setSidebarCollapsed(false)}
-              aria-label="Развернуть фильтры"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </button>
-          )}
-          
-          <div className="filters-content">
-            <h3 className="filters-title">Фильтры</h3>
-            
-            <div className="filter-group">
-              <label className="filter-label">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.35-4.35"/>
-                </svg>
-                Поиск
-              </label>
-              <input
-                type="text"
-                placeholder="Поиск по стране, направлению или номеру..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
-              />
-            </div>
-            
-            <div className="filter-group">
-              <label className="filter-label">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
-                Страна
-              </label>
-              <select
-                value={selectedCountry}
-                onChange={(e) => setSelectedCountry(e.target.value)}
-                className="filter-select"
-              >
-                <option value="all">Все страны</option>
-                {countries.map(country => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div className="filter-group">
-              <label className="filter-label">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="9" y1="3" x2="9" y2="21"/>
-                </svg>
-                Тип
-              </label>
-              <select
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="filter-select"
-              >
-                <option value="all">Все типы</option>
-                <option value="стационарные">Стационарные</option>
-                <option value="мобильные">Мобильные</option>
-                <option value="другие">Другие</option>
-              </select>
-            </div>
-            
-            <div className="results-count">
-              <div className="results-count-number">{filteredPrices.length}</div>
-              <div className="results-count-label">направлений</div>
-            </div>
+      <div className="pricing-filters-horizontal">
+        <div className="filter-search">
+          <div className="search-input-wrapper">
+            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              placeholder="Поиск…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input-horizontal"
+            />
           </div>
         </div>
 
-        <div className="pricing-results">
-          <div className="pricing-cards-container">
-            {Object.entries(groupedByCountry).map(([country, countryPrices]) => (
-              <div key={country} className="country-group">
-                <h3 className="country-title">{country}</h3>
-                <div className="country-prices-grid">
-                  {countryPrices.map((price, index) => (
-                    <div key={`${price.number}-${index}`} className="price-card">
-                      <div className="price-card-header">
-                        <div className="price-number">{price.number}</div>
-                        <div className={`price-type-badge ${price.type}`}>
-                          {price.type === 'стационарные' && '📞'}
-                          {price.type === 'мобильные' && '📱'}
-                          {price.type === 'другие' && '📍'}
-                        </div>
-                      </div>
-                      <div className="price-direction">{price.direction}</div>
-                      <div className="price-value">
-                        <span className="price-amount">{price.price.toFixed(4)}</span>
-                        <span className="price-currency">₽/мин</span>
+        <div className="filter-regions">
+          <button
+            className={`filter-tab ${selectedRegion === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('all')}
+          >
+            Все направления
+          </button>
+          <button
+            className={`filter-tab ${selectedRegion === 'Россия' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('Россия')}
+          >
+            Россия
+          </button>
+          <button
+            className={`filter-tab ${selectedRegion === 'Европа' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('Европа')}
+          >
+            Европа
+          </button>
+          <button
+            className={`filter-tab ${selectedRegion === 'Азия' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('Азия')}
+          >
+            Азия
+          </button>
+          <button
+            className={`filter-tab ${selectedRegion === 'Америка' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('Америка')}
+          >
+            Америка
+          </button>
+          <button
+            className={`filter-tab ${selectedRegion === 'Другие' ? 'active' : ''}`}
+            onClick={() => setSelectedRegion('Другие')}
+          >
+            Другие
+          </button>
+        </div>
+
+        <div className="filter-types">
+          <button
+            className={`filter-tab ${selectedType === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedType('all')}
+          >
+            Все типы
+          </button>
+          <button
+            className={`filter-tab ${selectedType === 'стационарные' ? 'active' : ''}`}
+            onClick={() => setSelectedType('стационарные')}
+          >
+            Стационарные
+          </button>
+          <button
+            className={`filter-tab ${selectedType === 'мобильные' ? 'active' : ''}`}
+            onClick={() => setSelectedType('мобильные')}
+          >
+            Мобильные
+          </button>
+          <button
+            className={`filter-tab ${selectedType === 'другие' ? 'active' : ''}`}
+            onClick={() => setSelectedType('другие')}
+          >
+            Другие
+          </button>
+        </div>
+      </div>
+
+      <div className="pricing-results">
+        <div className="pricing-cards-container">
+          {Object.entries(groupedByCountry).map(([country, countryPrices]) => (
+            <div key={country} className="country-group">
+              <h3 className="country-title">{country}</h3>
+              <div className="country-prices-grid">
+                {countryPrices.map((price, index) => (
+                  <div key={`${price.number}-${index}`} className="price-card">
+                    <div className="price-card-header">
+                      <div className="price-number">{price.number}</div>
+                      <div className={`price-type-badge ${price.type}`}>
+                        {price.type === 'стационарные' && '📞'}
+                        {price.type === 'мобильные' && '📱'}
+                        {price.type === 'другие' && '📍'}
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="price-direction">{price.direction}</div>
+                    <div className="price-value">
+                      <span className="price-amount">{price.price.toFixed(4)}</span>
+                      <span className="price-currency">₽/мин</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
