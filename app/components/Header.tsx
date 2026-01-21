@@ -1,3 +1,5 @@
+ 'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -20,10 +22,21 @@ export default function Header() {
       </div>
 
       <nav className="header-nav" aria-label="Навигация">
-        <a href="#home" className="nav-link">Главная</a>
+        <a
+          href="#home"
+          className="nav-link"
+          onClick={(e) => {
+            e.preventDefault()
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+        >
+          Главная
+        </a>
         <a href="#tariffs" className="nav-link">Тарифы</a>
         <a href="#advantages" className="nav-link">Преимущества</a>
         <Link href="/tariffs" className="nav-link">Телефония</Link>
+          <a href="#contact" className="nav-link">Контакты</a>
+
       </nav>
 
       <div className="header-right">
@@ -33,7 +46,7 @@ export default function Header() {
           </svg>
           <div className="phone-text">
             <span className="phone-label">Служба продаж</span>
-            <span className="phone-number">+7 8634 45 33 33</span>
+            <span className="phone-number">+7 863 445 33 33</span>
           </div>
         </div>
         <a 
