@@ -138,22 +138,23 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: clamp(40px, 8vw, 50px);
-  height: clamp(40px, 8vw, 50px);
-  min-width: 40px;
-  min-height: 40px;
-  background: rgba(255, 255, 255, 0.15);
+  width: clamp(50px, 10vw, 60px);
+  height: clamp(50px, 10vw, 60px);
+  min-width: 50px;
+  min-height: 50px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 5px;
   transition: transform 0.3s ease, background 0.3s ease;
   backdrop-filter: blur(10px);
   flex-shrink: 0;
   touch-action: manipulation;
+  border: 3px solid rgba(255, 255, 255, 0.4);
 }
 
 .header-logo:hover {
   transform: scale(1.1) rotate(5deg);
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .logo-image {
