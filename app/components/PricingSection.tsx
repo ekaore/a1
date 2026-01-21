@@ -36,12 +36,6 @@ export default function PricingSection() {
               key={index} 
               className={`pricing-card ${tariff.popular ? 'popular' : ''}`}
             >
-              {tariff.popular && (
-                <div className="popular-badge">
-                  <span>Популярный</span>
-                </div>
-              )}
-              
               <div className="card-glow"></div>
               
               <div className="card-content">
