@@ -1,13 +1,20 @@
-'use client'
+ 'use client'
+
+import { useEffect, useState } from 'react'
 
 export default function HeroSection() {
-  const handleConsultationClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    const contactSection = document.getElementById('contact')
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const [isConsultModalOpen, setIsConsultModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isConsultModalOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsConsultModalOpen(false)
+      }
     }
-  }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isConsultModalOpen])
 
   return (
     <section id="home" className="hero-section">
@@ -45,9 +52,13 @@ export default function HeroSection() {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </a>
-            <a href="#contact" className="hero-button secondary" onClick={handleConsultationClick}>
+            <button
+              type="button"
+              className="hero-button secondary"
+              onClick={() => setIsConsultModalOpen(true)}
+            >
               Получить консультацию
-            </a>
+            </button>
           </div>
           
           <div className="hero-stats">
@@ -107,6 +118,52 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+
+      {isConsultModalOpen && (
+        <div
+          className="modal-overlay"
+          role="presentation"
+          onClick={() => setIsConsultModalOpen(false)}
+        >
+          <div
+            className="modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="consult-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h3 id="consult-title" className="modal-title">Получить консультацию</h3>
+              <button
+                type="button"
+                className="modal-close"
+                aria-label="Закрыть"
+                onClick={() => setIsConsultModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <p className="modal-text">
+                Оставьте свой контактный номер — мы перезвоним и поможем подобрать решение.
+                Или позвоните нам напрямую.
+              </p>
+              <div className="modal-actions">
+                <a
+                  href="#contact"
+                  className="modal-action-button primary"
+                  onClick={() => setIsConsultModalOpen(false)}
+                >
+                  Оставить номер
+                </a>
+                <a href="tel:+78634453333" className="modal-action-button secondary">
+                  Позвонить: +7 863 445 33 33
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

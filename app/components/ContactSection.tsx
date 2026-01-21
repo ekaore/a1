@@ -24,7 +24,11 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="contact-section">
+    <section
+      id="contact"
+      className="contact-section"
+      style={{ minHeight: '100vh', scrollMarginTop: '80px' }}
+    >
       <div className="contact-container">
         <div className="contact-header">
           <h2 className="contact-title">Связаться с нами</h2>
@@ -41,7 +45,7 @@ export default function ContactSection() {
               </div>
               <div className="contact-info-text">
                 <h3 className="contact-info-title">Телефон</h3>
-                <p className="contact-info-value">+7 8634 45 33 33</p>
+                <p className="contact-info-value">+7 863 445 33 33</p>
               </div>
             </div>
 

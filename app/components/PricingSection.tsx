@@ -57,18 +57,18 @@ export default function PricingSection() {
               
               {tariff.speed === 'IP-Телефония' ? (
                 <Link href="/tariffs" className="card-button">
-                  Подробнее о тарифах
+                  Узнать о тарифах
                   <svg className="button-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
                 </Link>
               ) : (
-                <button className="card-button">
-                  Подробнее
+                <Link href="#contact" className="card-button">
+                  Подключить
                   <svg className="button-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
-                </button>
+                </Link>
               )}
             </div>
           ))}
