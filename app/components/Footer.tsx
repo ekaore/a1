@@ -34,7 +34,7 @@ export default function Footer() {
               <h4 className="footer-subtitle">Документы</h4>
               <div className="footer-contacts">
                 <a 
-                  href="http://www.kremlin.ru/acts/bank/19708" 
+                  href="/privat-polinicy.pdf" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="footer-link"
@@ -49,7 +49,7 @@ export default function Footer() {
                   <span>Закон о связи</span>
                 </a>
                 <a 
-                  href="http://www.kremlin.ru/acts/bank/19708" 
+                  href="/privat-polinicy.pdf" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="footer-link"

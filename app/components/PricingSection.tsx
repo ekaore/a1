@@ -36,6 +36,7 @@ export default function PricingSection() {
               key={index} 
               className={`pricing-card ${tariff.popular ? 'popular' : ''}`}
             >
+              
               <div className="card-glow"></div>
               
               <div className="card-content">
