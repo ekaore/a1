@@ -4,6 +4,24 @@ import { useEffect, useState } from 'react'
 
 export default function HeroSection() {
   const [isConsultModalOpen, setIsConsultModalOpen] = useState(false)
+  const [particles, setParticles] = useState<Array<{
+    left: string
+    top: string
+    animationDelay: string
+    animationDuration: string
+  }>>([])
+
+  useEffect(() => {
+    // Генерируем случайные значения только на клиенте
+    setParticles(
+      [...Array(20)].map(() => ({
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 3}s`,
+        animationDuration: `${3 + Math.random() * 2}s`
+      }))
+    )
+  }, [])
 
   useEffect(() => {
     if (!isConsultModalOpen) return
@@ -21,12 +39,12 @@ export default function HeroSection() {
       <div className="hero-background">
         <div className="hero-gradient"></div>
         <div className="hero-particles">
-          {[...Array(20)].map((_, i) => (
+          {particles.map((particle, i) => (
             <div key={i} className="particle" style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${3 + Math.random() * 2}s`
+              left: particle.left,
+              top: particle.top,
+              animationDelay: particle.animationDelay,
+              animationDuration: particle.animationDuration
             }}></div>
           ))}
         </div>
