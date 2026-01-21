@@ -2,8 +2,36 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function Header() {
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
+    e.preventDefault()
+    
+    if (pathname === '/') {
+      // Если уже на главной странице, просто скроллим
+      if (anchor === '') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        const element = document.querySelector(anchor)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+    } else {
+      // Если не на главной, переходим на главную и сохраняем якорь
+      if (anchor) {
+        sessionStorage.setItem('scrollAnchor', anchor)
+      } else {
+        sessionStorage.setItem('scrollAnchor', 'top')
+      }
+      router.push('/')
+    }
+  }
+
   return (
     <header className="header">
       <div className="header-left">
@@ -23,20 +51,34 @@ export default function Header() {
 
       <nav className="header-nav" aria-label="Навигация">
         <a
-          href="#home"
+          href="/"
           className="nav-link"
-          onClick={(e) => {
-            e.preventDefault()
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-          }}
+          onClick={(e) => handleAnchorClick(e, '')}
         >
           Главная
         </a>
-        <a href="#tariffs" className="nav-link">Тарифы</a>
-        <a href="#advantages" className="nav-link">Преимущества</a>
+        <a 
+          href="/#tariffs" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#tariffs')}
+        >
+          Тарифы
+        </a>
+        <a 
+          href="/#advantages" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#advantages')}
+        >
+          Преимущества
+        </a>
         <Link href="/tariffs" className="nav-link">Телефония</Link>
-          <a href="#contact" className="nav-link">Контакты</a>
-
+        <a 
+          href="/#contact" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#contact')}
+        >
+          Контакты
+        </a>
       </nav>
 
       <div className="header-right">
