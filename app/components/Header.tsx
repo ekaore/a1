@@ -25,6 +25,7 @@ export default function Header() {
             width={40} 
             height={40}
             className="logo-image"
+            style={{ width: 'auto', height: 'auto' }}
           />
         </Link>
         <Link href="/" className="header-title-link" onClick={closeMenu}>
