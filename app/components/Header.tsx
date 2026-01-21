@@ -3,8 +3,11 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function Header() {
+  const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -13,6 +16,31 @@ export default function Header() {
 
   const closeMenu = () => {
     setIsMenuOpen(false)
+  }
+
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
+    e.preventDefault()
+    closeMenu()
+    
+    if (pathname === '/') {
+      // Если уже на главной странице, просто скроллим
+      if (anchor === '') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        const element = document.querySelector(anchor)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+    } else {
+      // Если не на главной, переходим на главную и сохраняем якорь
+      if (anchor) {
+        sessionStorage.setItem('scrollAnchor', anchor)
+      } else {
+        sessionStorage.setItem('scrollAnchor', 'top')
+      }
+      router.push('/')
+    }
   }
 
   return (
@@ -67,20 +95,40 @@ export default function Header() {
         </div>
         
         <a
-          href="#home"
+          href="/"
           className="nav-link"
-          onClick={(e) => {
-            e.preventDefault()
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-            closeMenu()
-          }}
+          onClick={(e) => handleAnchorClick(e, '')}
         >
           Главная
         </a>
-        <a href="#tariffs" className="nav-link" onClick={closeMenu}>Тарифы</a>
-        <a href="#advantages" className="nav-link" onClick={closeMenu}>Преимущества</a>
-        <Link href="/tariffs" className="nav-link" onClick={closeMenu}>Телефония</Link>
-        <a href="#contact" className="nav-link" onClick={closeMenu}>Контакты</a>
+        <a 
+          href="/#tariffs" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#tariffs')}
+        >
+          Тарифы
+        </a>
+        <a 
+          href="/#advantages" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#advantages')}
+        >
+          Преимущества
+        </a>
+        <Link 
+          href="/tariffs" 
+          className="nav-link"
+          onClick={closeMenu}
+        >
+          Телефония
+        </Link>
+        <a 
+          href="/#contact" 
+          className="nav-link"
+          onClick={(e) => handleAnchorClick(e, '#contact')}
+        >
+          Контакты
+        </a>
         
         <a 
           href="https://acct.rgbl61.ru/" 
