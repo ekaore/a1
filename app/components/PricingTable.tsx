@@ -25,23 +25,50 @@ export default function PricingTable() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Загрузка данных через API
+  // Загрузка данных напрямую с клиента
   useEffect(() => {
     const fetchTariffs = async () => {
       try {
         setIsLoading(true)
         setError(null)
-        const response = await fetch('/api/tariffs')
-        const data = await response.json()
+        
+        // Добавляем таймаут для клиентского запроса
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 секунд
+        
+        try {
+          // Прямой запрос к внешнему API
+          const response = await fetch('http://voipapi.tagan.ru/statistic/rgbl/tariffs', {
+            method: 'GET',
+            headers: {
+              'accept': 'application/json'
+            },
+            signal: controller.signal
+          })
+          
+          clearTimeout(timeoutId)
+          
+          if (!response.ok) {
+            throw new Error(`Ошибка ${response.status}: ${response.statusText}`)
+          }
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Ошибка при загрузке тарифов')
-        }
+          const data = await response.json()
 
-        if (data.success && Array.isArray(data.data)) {
-          setTariffs(data.data)
-        } else {
-          throw new Error('Неверный формат данных')
+          // Проверяем структуру ответа
+          if (data.status && data.data && Array.isArray(data.data)) {
+            setTariffs(data.data)
+          } else {
+            throw new Error('Неверный формат данных от сервера')
+          }
+        } catch (fetchError) {
+          clearTimeout(timeoutId)
+          if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+            throw new Error('Превышено время ожидания. Сервер не отвечает. Попробуйте обновить страницу.')
+          }
+          if (fetchError instanceof Error && fetchError.message.includes('Failed to fetch')) {
+            throw new Error('Не удалось подключиться к серверу тарифов. Проверьте подключение к интернету.')
+          }
+          throw fetchError
         }
       } catch (err) {
         console.error('Error fetching tariffs:', err)
