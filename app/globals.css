@@ -3142,6 +3142,84 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
   font-size: 1.25rem;
 }
 
+.pricing-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.pricing-loading .spinner {
+  animation: spin 1s linear infinite;
+  color: #c62828;
+  margin-bottom: 1rem;
+}
+
+.pricing-loading p {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.pricing-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #c62828;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.pricing-error svg {
+  margin-bottom: 1rem;
+  color: #c62828;
+}
+
+.pricing-error p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.pricing-retry-button {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #c62828 0%, #a0151a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.15);
+}
+
+.pricing-retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(198, 40, 40, 0.4);
+  background: linear-gradient(135deg, #a0151a 0%, #a0151a 100%);
+}
+
+.pricing-retry-button:active {
+  transform: translateY(0);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .region-filter-tabs {
   display: flex;
   justify-content: center;
