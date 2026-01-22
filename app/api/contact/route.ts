@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, phone, email, message } = body
+    const { name, address, phone, email, message } = body
 
     // Валидация данных
     if (!name || !phone || !email) {
@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
       fields: {
         TITLE: name,
         NAME: name,
+        ADDRESS: address || '',
         PHONE: [
           {
             VALUE: formattedPhone,

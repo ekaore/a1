@@ -5,6 +5,7 @@ import { useState } from 'react'
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
+    address: '',
     phone: '',
     email: '',
     message: ''
@@ -15,6 +16,33 @@ export default function ContactSection() {
     type: 'success' | 'error' | null
     message: string
   }>({ type: null, message: '' })
+  const [phoneError, setPhoneError] = useState('')
+
+  const formatPhoneNumber = (value: string): string => {
+    // Удаляем все нецифровые символы
+    let digits = value.replace(/\D/g, '')
+    
+    // Если начинается с 8, заменяем на 7
+    if (digits.startsWith('8')) {
+      digits = '7' + digits.slice(1)
+    }
+    
+    // Если не начинается с 7 и есть цифры, добавляем 7 в начало
+    if (digits.length > 0 && !digits.startsWith('7')) {
+      digits = '7' + digits
+    }
+    
+    // Ограничиваем до 11 цифр (7 + 10)
+    digits = digits.slice(0, 11)
+    
+    // Форматируем: +7 (___) ___-__-__
+    if (digits.length === 0) return ''
+    if (digits.length === 1) return `+${digits}`
+    if (digits.length <= 4) return `+7 (${digits.slice(1)}`
+    if (digits.length <= 7) return `+7 (${digits.slice(1, 4)}) ${digits.slice(4)}`
+    if (digits.length <= 9) return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`
+    return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,6 +54,14 @@ export default function ContactSection() {
       })
       return
     }
+
+    // Финальная валидация телефона
+    const digits = formData.phone.replace(/\D/g, '')
+    if (digits.length !== 11) {
+      setPhoneError('Введите полный номер телефона')
+      return
+    }
+    setPhoneError('')
 
     setIsSubmitting(true)
     setSubmitStatus({ type: null, message: '' })
@@ -54,11 +90,13 @@ export default function ContactSection() {
       // Очистка формы
       setFormData({
         name: '',
+        address: '',
         phone: '',
         email: '',
         message: ''
       })
       setAgreedToPrivacy(false)
+      setPhoneError('')
 
     } catch (error) {
       setSubmitStatus({
@@ -70,11 +108,31 @@ export default function ContactSection() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value)
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      phone: formatted
     })
+    
+    // Валидация: должен быть полный номер +7 (___) ___-__-__
+    const digits = formatted.replace(/\D/g, '')
+    if (formatted && digits.length !== 11) {
+      setPhoneError('Введите полный номер телефона')
+    } else {
+      setPhoneError('')
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.target.name === 'phone') {
+      handlePhoneChange(e as React.ChangeEvent<HTMLInputElement>)
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      })
+    }
   }
 
   return (
@@ -165,6 +223,20 @@ export default function ContactSection() {
             </div>
 
             <div className="form-group">
+              <label htmlFor="address" className="form-label">Адрес подключения</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Введите адрес подключения"
+                required
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="phone" className="form-label">Телефон</label>
               <input
                 type="tel"
@@ -172,10 +244,11 @@ export default function ContactSection() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="form-input"
+                className={`form-input ${phoneError ? 'form-input-error' : ''}`}
                 placeholder="+7 (___) ___-__-__"
                 required
               />
+              {phoneError && <span className="form-error">{phoneError}</span>}
             </div>
 
             <div className="form-group">
