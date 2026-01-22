@@ -11,8 +11,12 @@ export default function ContactSection() {
     message: ''
   })
   const [agreedToPrivacy, setAgreedToPrivacy] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null
+    message: string
+  }>({ type: null, message: '' })
   const [phoneError, setPhoneError] = useState('')
-  const [emailError, setEmailError] = useState('')
 
   const formatPhoneNumber = (value: string): string => {
     // Удаляем все нецифровые символы
@@ -40,9 +44,68 @@ export default function ContactSection() {
     return `+7 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7, 9)}-${digits.slice(9, 11)}`
   }
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!agreedToPrivacy) {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Необходимо согласиться с политикой обработки персональных данных'
+      })
+      return
+    }
+
+    // Финальная валидация телефона
+    const digits = formData.phone.replace(/\D/g, '')
+    if (digits.length !== 11) {
+      setPhoneError('Введите полный номер телефона')
+      return
+    }
+    setPhoneError('')
+
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: '' })
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Ошибка при отправке формы')
+      }
+
+      // Успешная отправка
+      setSubmitStatus({
+        type: 'success',
+        message: data.message || 'Форма успешно отправлена! Мы свяжемся с вами в ближайшее время.'
+      })
+
+      // Очистка формы
+      setFormData({
+        name: '',
+        address: '',
+        phone: '',
+        email: '',
+        message: ''
+      })
+      setAgreedToPrivacy(false)
+      setPhoneError('')
+
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.'
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,45 +124,9 @@ export default function ContactSection() {
     }
   }
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setFormData({
-      ...formData,
-      email: value
-    })
-    
-    // Валидация email
-    if (value && !validateEmail(value)) {
-      setEmailError('Введите корректный email адрес')
-    } else {
-      setEmailError('')
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    // Финальная валидация
-    const digits = formData.phone.replace(/\D/g, '')
-    if (digits.length !== 11) {
-      setPhoneError('Введите полный номер телефона')
-      return
-    }
-    
-    if (!validateEmail(formData.email)) {
-      setEmailError('Введите корректный email адрес')
-      return
-    }
-    
-    // Здесь будет логика отправки формы
-    console.log('Form submitted:', formData)
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.target.name === 'phone') {
       handlePhoneChange(e as React.ChangeEvent<HTMLInputElement>)
-    } else if (e.target.name === 'email') {
-      handleEmailChange(e as React.ChangeEvent<HTMLInputElement>)
     } else {
       setFormData({
         ...formData,
@@ -162,6 +189,25 @@ export default function ContactSection() {
           </div>
 
           <form className="contact-form" onSubmit={handleSubmit}>
+            {submitStatus.type && (
+              <div className={`form-status form-status-${submitStatus.type}`}>
+                {submitStatus.type === 'success' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                )}
+                {submitStatus.type === 'error' && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                )}
+                <span>{submitStatus.message}</span>
+              </div>
+            )}
+
             <div className="form-group">
               <label htmlFor="name" className="form-label">Имя</label>
               <input
@@ -213,11 +259,10 @@ export default function ContactSection() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`form-input ${emailError ? 'form-input-error' : ''}`}
+                className="form-input"
                 placeholder="your@email.com"
                 required
               />
-              {emailError && <span className="form-error">{emailError}</span>}
             </div>
 
             <div className="form-group">
@@ -262,13 +307,24 @@ export default function ContactSection() {
             <button 
               type="submit" 
               className="contact-submit-button"
-              disabled={!agreedToPrivacy}
+              disabled={!agreedToPrivacy || isSubmitting}
             >
+              {isSubmitting ? (
+                <>
+                  <svg className="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                  </svg>
+                  Отправка...
+                </>
+              ) : (
+                <>
               Отправить сообщение
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22 2L11 13"/>
                 <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>
+                </>
+              )}
             </button>
           </form>
         </div>
