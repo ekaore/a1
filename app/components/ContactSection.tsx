@@ -5,6 +5,7 @@ import { useState } from 'react'
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
+    address: '',
     phone: '',
     email: '',
     message: ''
@@ -88,6 +89,20 @@ export default function ContactSection() {
                 onChange={handleChange}
                 className="form-input"
                 placeholder="Введите ваше имя"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="address" className="form-label">Адрес подключения</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Введите адрес подключения"
                 required
               />
             </div>

@@ -59,7 +59,7 @@ export default function Footer() {
                     <path d="M6 9V7a6 6 0 1 1 12 0v2"/>
                     <rect x="5" y="9" width="14" height="12" rx="2" ry="2"/>
                   </svg>
-                  <span>Политика конфиденциальности</span>
+                  <span>Политика обработки персональных данных</span>
                 </a>
               </div>
             </div>
