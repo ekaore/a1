@@ -326,7 +326,7 @@ export default function PricingTable() {
                           {price.direction}
                         </td>
                         <td className="pricing-table-td pricing-table-td-price">
-                          {price.price.toFixed(4)} ₽/мин
+                          {price.price} ₽/мин
                         </td>
                       </tr>
                     ))
