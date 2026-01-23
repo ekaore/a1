@@ -191,7 +191,7 @@ export default function PricingTable() {
     <div className="pricing-table-section">
       <div className="pricing-table-header">
         <h2 className="pricing-table-title">Цены по основным направлениям</h2>
-        <p className="pricing-table-subtitle">В рамках договора ИП "Григорян"</p>
+        <p className="pricing-table-subtitle">В рамках договора <span style={{ color: 'red', fontSize: '1.2em', fontWeight: 'bold' }}>а1</span></p>
       </div>
 
       <div className="pricing-filters-horizontal">
