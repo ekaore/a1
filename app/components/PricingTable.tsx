@@ -38,7 +38,7 @@ export default function PricingTable() {
         
         try {
           // Прямой запрос к внешнему API
-          const response = await fetch('http://voipapi.tagan.ru/statistic/rgbl/tariffs', {
+          const response = await fetch('https://voipapi.tagan.ru/statistic/rgbl/tariffs', {
             method: 'GET',
             headers: {
               'accept': 'application/json'
