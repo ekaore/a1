@@ -6,7 +6,6 @@ import ScrollToTop from './components/ScrollToTop'
 
 export const metadata: Metadata = {
   title: 'a1-telecom.ru',
-  description: 'Next.js application with TypeScript',
   icons: {
     icon: '/logo.png',
   },
