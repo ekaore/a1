@@ -34,7 +34,7 @@ export default function PricingTable() {
         
         // Добавляем таймаут для клиентского запроса
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 секунд
+        const timeoutId = setTimeout(() => controller.abort(), 30000) 
         
         try {
           // Прямой запрос к внешнему API
