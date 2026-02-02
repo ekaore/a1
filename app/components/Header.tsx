@@ -50,8 +50,8 @@ export default function Header() {
           <Image 
             src="/logo.png" 
             alt="a1" 
-            width={50} 
-            height={50}
+            width={30} 
+            height={30}
             className="logo-image"
             style={{ width: 'auto', height: 'auto' }}
           />
