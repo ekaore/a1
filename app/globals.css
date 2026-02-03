@@ -2184,7 +2184,7 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
   }
 }
 
-/* Плавная адаптация до 1150px - уменьшаем отступы и размеры */
+/* Плавная адаптация до 1151px - уменьшаем отступы и размеры */
 @media (max-width: 1400px) and (min-width: 1151px) {
   .header {
     padding: 1.5rem clamp(2rem, 6%, 9rem);
@@ -2277,8 +2277,8 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
   }
 }
 
-/* Критическая точка - скрываем навигацию в бургер-меню при < 1150px */
-@media (max-width: 1150px) {
+/* Критическая точка - скрываем навигацию в бургер-меню при <= 1151px */
+@media (max-width: 1151px) {
   /* Скрываем десктопную навигацию (только пункты меню) */
   .header-nav:not(.mobile-open) {
     display: none;
@@ -2317,8 +2317,8 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
   }
 }
 
-/* Стили мобильного меню применяются при < 1150px */
-@media (max-width: 1150px) {
+/* Стили мобильного меню применяются при <= 1151px */
+@media (max-width: 1151px) {
   .mobile-menu-toggle {
     display: flex;
     flex-direction: column;
@@ -2880,7 +2880,7 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .mobile-phone-banner:hover {
     background: rgba(255, 255, 255, 0.22);
     border-color: rgba(255, 255, 255, 0.3);
@@ -2912,7 +2912,7 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .mobile-phone-banner .phone-number {
     font-size: 0.8rem;
     color: white;
@@ -2949,7 +2949,7 @@ button, a.nav-link, .header-button, .mobile-menu-toggle {
     text-overflow: ellipsis;
     position: relative;
   }
-  
+
   .mobile-header-button::before {
     content: '';
     position: absolute;
